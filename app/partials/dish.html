@@ -3,3 +3,57 @@
 
 <!-- TODO in Lab 5: Display the dish information including image, Description, 
 Instructions, Ingredients and total cost. -->
+
+<div ng-controller="DinnerCtrl" class="bodyContent">
+    <div ng-show="!isLoading && !errorOccured">
+        <div class="col-md-6">
+            <div class="paddingLeftRight">
+                <h3>{{pendingDish.Title}}</h3>
+                <figure>
+                    <img ng-src="{{pendingDish.ImageURL}}" class="img250"/>
+                    <figcaption class="bigImageFigcaption">{{pendingDish.Description}}</figcaption>
+                </figure>
+                <br/>
+                <button ng-click="goBack()" type="button" class="btn btn-primary">Go back to select another dish</button>
+                <br/><br/>
+                <h3>Preparation</h3>
+                <div style="white-space:pre-wrap;">{{pendingDish.Instructions}}</div>
+                <br/><br/><br/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="ingredientsDivBackground">
+                <div class="marginLeftRight">
+                    <p><b>INGREDIENTS FOR {{getNumberOfGuests()}} PEOPLE</b></p>
+                    <hr/>
+                    <table>
+                        <tr ng-repeat="ingredient in pendingDish.Ingredients">
+                            <td class="ingredients">{{ingredient.Quantity * getNumberOfGuests() | round}} {{ingredient.Unit}}</td>
+                            <td class="ingredients">{{ingredient.Name}}</td>
+                            <td class="ingredients">SEK</td>
+                            <td class="ingredients" style="text-align:right">{{ingredient.Quantity * getNumberOfGuests() | round}}</td>
+                        </tr>
+                    </table>
+                    <hr/>
+                    <table style="float:right">
+                        <tr>
+                            <td class="ingredients">SEK</td>
+                            <td ng-controller="DishCtrl" class="ingredients" style="text-align:right">{{getTotalDishPrice(pendingDish) | round}}</td>
+                        </tr>
+                    </table>
+                    <button ng-controller="DishCtrl" ng-click="addDishToMenu()" type="button" class="btn btn-primary">Confirm Dish</button>
+                    <br/><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="!isLoading && errorOccured" class="error">
+        <div class="paddingLeftRight">
+            <h1>{{errorText}}</h1>
+            <a href="#/search" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+    <div ng-show="isLoading" class="loading">
+        <img ng-src="images/ajax-loader2.gif"/>
+    </div>
+</div>

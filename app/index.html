@@ -18,6 +18,7 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     
     <!-- The application JavaScript code -->
     <script src="js/app.js"></script>
@@ -26,10 +27,19 @@ which module to associate the app with. In app.js we create the "dinnerPlanner" 
     <script src="js/dinnerCtrl.js"></script>
     <script src="js/dishCtrl.js"></script>
 
+    <!-- CSS for the Homlette application -->
+    <link rel="stylesheet" type="text/css" href="HomletteStyle.css">
+
   </head>
   <body>
     <!-- Here in index.html you should put only the layout that is shared among all the screens (e.g. header
     ,footer, etc.). The rest of the view specific layout will go into the html partials (check partials folder) -->
+      <header id="header">
+        <br>
+	    <h1><a href="#/home/" style="text-decoration: none; color: #000000;">HOMLETTE </a></h1>
+        <p>From the best chefs in the world directly into your kitchen</p>
+        <br><br>
+      </header>
 
     <!-- ng-view Angular directive is where the partials will be loaded. app.js configures the $routingProvider
     where you specify which partial should be loaded when. -->

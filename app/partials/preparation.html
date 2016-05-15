@@ -1,0 +1,31 @@
+<!-- We include the dinner header as it is shared across two screens. -->
+<ng-include src="'partials/dinnerHeader.html'" ng-controller="DinnerCtrl"></ng-include>
+
+<div ng-controller="DinnerCtrl" class="wholeScreen">
+    <div class="container top80">
+        <div ng-repeat="dish in getDinnerMenu()" class='row whiteTranslucent margin'>
+            <h3><b>&nbsp;&nbsp;{{dish.Title}}</b></h3>
+            <br/>
+            <div class='col-md-2'>
+                <img ng-src="{{dish.ImageURL}}" class='img150'/>
+                <br/>
+                {{dish.Description}}
+                <br/>
+            </div>
+            <div class='col-md-5'>
+                <h5><b>INGREDIENTS</b></h5>
+                <p ng-repeat="ingredient in dish.Ingredients">
+                    {{ingredient.Quantity * getNumberOfGuests() | round}} {{ingredient.Unit}} {{ingredient.Name}}
+                    <br/>
+                </p>
+                <br/>
+            </div>
+            <div class='col-md-5'>
+                <h5><b>PREPARATION</b></h5>
+                <div style="white-space:pre-wrap;">{{dish.Instructions}}</div>
+                <br/>
+            </div>
+        </div>
+        <br/>
+    </div>
+</div>
