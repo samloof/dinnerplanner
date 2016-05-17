@@ -33,16 +33,17 @@ dinnerPlannerApp.factory('Dinner', function ($resource, $cookieStore) {
     var selectedDishes = [];
     var pendingDish = null;
     var apiKey = "YOUR_API_KEY_HERE";
+    var numberOfDishes = 20;
 
-    this.DishSearch = $resource('http://api.bigoven.com/recipes', { pg: 1, rpp: 20, api_key: apiKey }, { get: { method: "GET", cache: true } });
+    this.DishSearch = $resource('http://api.bigoven.com/recipes', { pg: 1, rpp: numberOfDishes, api_key: apiKey }, { get: { method: "GET", cache: true } });
     this.Dish = $resource('http://api.bigoven.com/recipe/:id', { api_key: apiKey }, { get: { method: "GET", cache: true } });
     
-    // Sets the pending dish
+    // Sets the pending dish.
     this.setPendingDish = function (dish) {
         pendingDish = dish;
     }
 
-    // Gets the pending dish
+    // Gets the pending dish.
     this.getPendingDish = function () {
         return pendingDish;
     }
@@ -81,13 +82,13 @@ dinnerPlannerApp.factory('Dinner', function ($resource, $cookieStore) {
         return this.getTotalMenuPrice() + this.getDishPrice(pendingDish);
     }
 
-    // Adds a dish to the menu
+    // Adds a dish to the menu.
     this.addDishToMenu = function (dish) {
         selectedDishes.push(dish);
         this.storeDinnerMenuInCookie();
     }
 
-    // Removes dish from menu
+    // Removes dish from menu.
     this.removeDishFromMenu = function (id) {
         for (var i = 0; i < selectedDishes.length; i++) {
             if (selectedDishes[i].RecipeID == id) {
@@ -98,7 +99,7 @@ dinnerPlannerApp.factory('Dinner', function ($resource, $cookieStore) {
         this.storeDinnerMenuInCookie();
     }
 
-    // Adds the recipe ids for the dishes on the menu to a cookie
+    // Adds the recipe ids for the dishes on the menu to a cookie.
     this.storeDinnerMenuInCookie = function () {
         var recipeIds = [];
         for (var i = 0; i < selectedDishes.length; i++) {
@@ -130,6 +131,18 @@ dinnerPlannerApp.factory('Dinner', function ($resource, $cookieStore) {
             return true;
         }
         return false;
+    }
+
+    // Gets the number of dishes that is used when making a dish search.
+    this.getNumberOfDishes = function () {
+        return numberOfDishes;
+    }
+
+    // Sets the number of dishes that is used when making a dish search.
+    this.setNumberOfDishes = function (numDishes) {
+        numberOfDishes = numDishes;
+        // Important that the query string is rebuilt in order to fetch the correct number of dishes.
+        this.DishSearch = $resource('http://api.bigoven.com/recipes', { pg: 1, rpp: numberOfDishes, api_key: apiKey }, { get: { method: "GET", cache: true } });
     }
 
     this.initDinnerMenu();

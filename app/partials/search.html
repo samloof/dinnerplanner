@@ -5,14 +5,18 @@
 not support it in free version) and list all the dishes that match the search. -->
 
 
-<div class="bodyContent">
+<div class="bodyContent" ng-controller="SearchCtrl">
     <div id="selectDishHeaderBackground">
         <div id="selectDishHeader">
             <p><b>SELECT DISH</b></p>
             <hr/>
             <input ng-model="query" ng-keypress="handleKeyPress($event)" type="text" style="width:240px" placeholder="Enter key words"/>
             <button ng-click="search(query)" type="button" class="btn btn-primary">Search</button>
-            {{status}}
+            &nbsp;Number&nbsp;of&nbsp;items:
+            <select ng-model="numberOfDishes" ng-change="setNumberOfDishes()"
+		            ng-options="numDishes as numDishes for numDishes in [10, 20, 25, 50, 75, 100, 200]">
+            </select>
+            &nbsp;&nbsp;{{status}}
             <br/><br/>
         </div>
     </div>

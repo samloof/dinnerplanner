@@ -20,8 +20,6 @@ dinnerPlannerApp.controller('SearchCtrl', function ($scope, Dinner, $cookieStore
         }
 
         Dinner.DishSearch.get({ title_kw: query }, function (data) {
-            $scope.dishes = data.Results;
-
             // Take care of 403 Invalid API Client, 400 API rate limit exceeded etc
             if (data.Results == undefined && data.StatusCode != null) {
                 $scope.handleError(data.StatusCode + " " + data.Message);
@@ -34,6 +32,7 @@ dinnerPlannerApp.controller('SearchCtrl', function ($scope, Dinner, $cookieStore
                     $scope.errorOccured = true;
                 }
                 else {
+                    $scope.dishes = data.Results;
                     $scope.errorOccured = false; // Don't remove. Case: Search when internet cable unplugged, plug it and search again.
                 }
             }
@@ -49,17 +48,38 @@ dinnerPlannerApp.controller('SearchCtrl', function ($scope, Dinner, $cookieStore
         $scope.errorOccured = true;
     }
 
+    // Handle enter key in search field
     $scope.handleKeyPress = function (keyEvent) {
         if (keyEvent.which === 13) {
             $scope.search($scope.query);
         }
     }
 
-    // Display search result when the page is loaded
-    if ($cookieStore.get('searchString') == undefined || $cookieStore.get('searchString') == "null") {
-        $scope.search(null);
+    // Gets the number of dishes that is used when making a dish search.
+    $scope.getNumberOfDishes = function () {
+        return Dinner.getNumberOfDishes();
     }
-    else {
-        $scope.search($cookieStore.get('searchString'));
+
+    // Sets the number of dishes and makes a dish search.
+    $scope.setNumberOfDishes = function () {
+        Dinner.setNumberOfDishes($scope.numberOfDishes);
+        $scope.pageLoadedSearch();
     }
+
+    // Search with respect to that set in the cookie if one exists, otherwise use null
+    $scope.pageLoadedSearch = function () {
+        if ($cookieStore.get('searchString') == undefined || $cookieStore.get('searchString') == "null") {
+            $scope.search(null);
+        }
+        else {
+            $scope.search($cookieStore.get('searchString'));
+        }
+    }
+
+    // Get initial value for number of dishes that shall be displayed on the page.
+    $scope.numberOfDishes = $scope.getNumberOfDishes();
+
+    // Display search result when the page is loaded.
+    $scope.pageLoadedSearch();
+
 });
